@@ -29,7 +29,7 @@ import React from "react";
 import { useAppData } from "@/context/AppDataContextType ";
 
 const formSchema = z.object({
-  name: z
+  description: z
     .string()
     .min(6, {
       message: "O nome deve ter pelo menos 6 caracteres.",
@@ -37,75 +37,79 @@ const formSchema = z.object({
     .max(16, {
       message: "O nome deve ter no máximo 16 caracteres.",
     }),
-  startDate: z.string().min(1, { message: "Data inicial obrigatória" }),
-  endDate: z.string().min(1, { message: "Data final obrigatória" }),
-  active: z.boolean(),
+  active: z.string(),
+
+  url: z.string().optional(),
+  order: z.preprocess(
+    (val) => (val === "" ? undefined : Number(val)),
+    z.number().optional()
+  ),
 });
 
 const TableForm = () => {
-  const { tickets, adicionarTicket, editarTicket } = useAppData();
+  const { videos, adicionarVideo, editarVideo } = useAppData();
   const router = useRouter();
   const params = useParams();
   const id = params?.id;
 
-  const ticket = tickets.find((t) => String(t.id) === id);
+  const video = videos.find((v) => String(v.id) === id);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: ticket?.name || "",
-      startDate: ticket?.startDate || "",
-      endDate: ticket?.endDate || "",
-      active: ticket ? ticket.status === "Ativo" : true,
+      active: video ? video.active === "Ativo" : "Desativado",
+      description: video?.description ?? "",
+      url: video?.url ?? "",
+      order: video?.order ?? undefined,
     },
   });
 
   React.useEffect(() => {
-    if (ticket) {
+    if (video) {
       form.reset({
-        name: ticket.name,
-        startDate: ticket.startDate,
-        endDate: ticket.endDate,
-        active: ticket.status === "Ativo",
+        active: video.active === "Ativo",
       });
     }
-  }, [ticket]);
+  }, [video]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (ticket) {
-      editarTicket(ticket.id, {
-        name: values.name,
-        startDate: values.startDate,
-        endDate: values.endDate,
-        status: values.active ? "Ativo" : "Desativado",
-      });
+    console.log(values);
+    const videoData = {
+      description: values.description,
+      url: values.url,
+      order: values.order,
+      active: values.active ? "Ativo" : "Desativado",
+    };
+
+    if (video) {
+      editarVideo(video.id, videoData);
     } else {
-      adicionarTicket({
+      adicionarVideo({
         id: Date.now(),
-        name: values.name,
-        startDate: values.startDate,
-        endDate: values.endDate,
-        status: values.active ? "Ativo" : "Desativado",
+        ...videoData,
       });
     }
-    router.push("/pages/tickets");
+    router.push("/pages/videos");
   }
 
   return (
-    <Card className="bg-slate-100 dark:bg-slate-950 mb-3 ml-10 mr-2 rounded-sm shadow-2xl shadow-card-foreground">
+    <Card className="bg-slate-100 dark:bg-slate-950 mb-4 ml-10 mr-2 rounded-sm shadow-2xl shadow-card-foreground">
       <CardHeader className="flex justify-between">
         <div>
           <CardTitle className="font-bold text-2xl w-1/2 dark:text-white">
-            Bilhetes
+            Vídeos
           </CardTitle>
-          <CardDescription className="mt-3" >Cadastro bilhete de atendimento:</CardDescription>
+
+          <CardDescription className="mt-5">
+            Vídeos para exibição:
+          </CardDescription>
         </div>
         <div>
           <Button
             asChild
             className="bg-slate-500 hover:bg-slate-700 hover:text-white"
           >
-            <Link href="/pages/tickets">
+            <Link href="/pages/videos">
               <MoveLeft className="mr-2" />
               Voltar
             </Link>
@@ -117,39 +121,37 @@ const TableForm = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="grid grid-cols-2  gap-4"
+            className="grid grid-flow-row-dense grid-cols-2 grid-rows-4 gap-4"
           >
             <FormField
               control={form.control}
-              name="name"
+              name="description"
               render={({ field }) => (
-                <FormItem className="col-span-1 ">
-                  <FormLabel>Nome</FormLabel>
+                <FormItem className="col-span-2">
+                  <FormLabel>Título</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nome do bilhete" {...field} />
+                    <Input placeholder="Título do vídeo:" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <br />
-     
-
+           
             <FormField
               control={form.control}
-              name="startDate"
+              name="url"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Data inicial</FormLabel>
+                  <FormLabel>Url - Endereço do vídeo:</FormLabel>
                   <FormControl>
                     <Input
-                      type="date"
-                      className="col-span-3"
+                      type="url"
+                      placeholder="Endereço do vídeo, exemplo: https://exemplo.com.br"
+                      className="w-full text-lg  leading-6"
                       style={{
-                        textAlign: "center",
+                        textAlign: "left",
                         fontSize: "14px",
                       }}
-                      placeholder=""
                       {...field}
                     />
                   </FormControl>
@@ -160,15 +162,20 @@ const TableForm = () => {
 
             <FormField
               control={form.control}
-              name="endDate"
+              name="order"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Data final</FormLabel>
+                  <FormLabel>Ordem de exibição dos vídeos:</FormLabel>
                   <FormControl>
                     <Input
-                      type="date"
-                      className="col-span-2"
-                      placeholder=""
+                      type="number"
+                      className="w-full text-lg  leading-6"
+                      style={{
+                        textAlign: "left",
+                        fontSize: "14px",
+                      }}
+                      {...field}
+                      placeholder="Exemplo: Vídeo 1"
                       {...field}
                     />
                   </FormControl>
@@ -181,12 +188,12 @@ const TableForm = () => {
               control={form.control}
               name="active"
               render={({ field }) => (
-                <FormItem className="col-start-1 col-span-1 mt-5">
+                <FormItem className="col-span-2 mt-3 ">
                   <FormLabel>Ativo?</FormLabel>
                   <RadioGroup
                     value={field.value ? "T" : "F"}
                     onValueChange={(val) => field.onChange(val === "T")}
-                    className="flex space-x-4"
+                    className="flex items-center space-x-4"
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="T" id="option-t" />
@@ -201,10 +208,12 @@ const TableForm = () => {
                 </FormItem>
               )}
             />
-            <div className="col-start-1 col-span-1 mt-3 ">
+
+            <div className="col-span-2 flex justify-start ">
               <Button
+                
                 type="submit"
-                className="mt-3 w-2/6 bg-blue-600 hover:bg-blue-800 dark:bg-slate-500 dark:hover:bg-slate-700 text-white font-bold py-2 px-4 rounded"
+                className="mt-5 w-1/6 bg-blue-600 hover:bg-blue-800 dark:bg-slate-500 dark:hover:bg-slate-700 text-white font-bold py-2 px-4 rounded"
               >
                 Salvar
               </Button>

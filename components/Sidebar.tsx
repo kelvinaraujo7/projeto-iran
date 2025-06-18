@@ -20,12 +20,13 @@ import Link from "next/link";
 import Image from "next/image";
 import logoCofen from "../img/250x250.png";
 import { ModeToggle } from "./ui/toggle";
+import {CalendarDays, ReceiptText, SquaresUnite   } from "lucide-react";
 
 const Sidebar = () => {
   return (
     <Command
       className="bg-blue-200 dark:bg-slate-900 mt-5 ml-4 rounded-sm shadow-2xl 
-        shadow-card-foreground w-sm h-screen"
+        shadow-card-foreground w-sm h-auto min-h-screen  "
     >
       <div className="flex items-center justify-between p-4">
         <Image
@@ -39,14 +40,15 @@ const Sidebar = () => {
 
       <CommandList
         className="h-full max-h-auto  rounded-2xl bg-blue-300 dark:bg-slate-950
-                inset-shadow-sm inset-shadow-white p-2"
+                inset-shadow-sm inset-shadow-white p-2   "
       >
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Gestão de Fila">
           <CommandItem>
             <UserCheck className="mr-2 h-4 w-4" />
-            <Link href="/">Atendimento</Link>
+            <Link href="/pages/emissao-ficha">Atendimento</Link>
           </CommandItem>
+         
         </CommandGroup>
         <CommandSeparator />
         <CommandGroup heading="Gestão de Usuários">
@@ -58,6 +60,11 @@ const Sidebar = () => {
             <Users className="mr-2 h-4 w-4" />
             <Link href="/">Usuários</Link>
           </CommandItem>
+          
+          <CommandItem>
+            <Ticket className="mr-2 h-4 w-4" />
+            <Link href="/pages/services2">Fila de atendimento </Link>
+          </CommandItem>
         </CommandGroup>
         <CommandSeparator />
         <CommandGroup heading="Configurações">
@@ -67,34 +74,36 @@ const Sidebar = () => {
           </CommandItem>
           <CommandItem>
             <BriefcaseBusiness className="mr-2 h-4 w-4" />
-            <Link href="/">Depatamento</Link>
+            <Link href="/pages/departments">Departamentos</Link>
           </CommandItem>
           <CommandItem>
-            <BriefcaseBusiness className="mr-2 h-4 w-4" />
+            <SquaresUnite  className="mr-2 h-4 w-4" />
             <Link href="/pages/states">Estados</Link>
           </CommandItem>
           <CommandItem>
             <BriefcaseBusiness className="mr-2 h-4 w-4" />
             <Link href="/pages/units">Unidades</Link>
           </CommandItem>
+
           <CommandItem>
-            <BriefcaseBusiness className="mr-2 h-4 w-4" />
-            <Link href="/pages/tickets">Bilhetes</Link>
-          </CommandItem>
-          <CommandItem>
-            <Sofa className="mr-2 h-4 w-4" />
+            <ReceiptText   className="mr-2 h-4 w-4" />
             <Link href="/pages/tables">Guichês</Link>
+          </CommandItem>
+
+          <CommandItem>
+            <CalendarDays  className="mr-2 h-4 w-4" />
+            <Link href="/pages/holidays">Feriados</Link>
           </CommandItem>
         </CommandGroup>
         <CommandSeparator />
         <CommandGroup heading="Comunicação">
           <CommandItem>
             <Ticket className="mr-2 h-4 w-4" />
-            <Link href="/3">Informativos</Link>
+            <Link href="/pages/tickets">Informativos</Link>
           </CommandItem>
           <CommandItem>
             <Video className="mr-2 h-4 w-4" />
-            <Link href="/2">Vídeos</Link>
+            <Link href="/pages/videos">Vídeos</Link>
           </CommandItem>
         </CommandGroup>
       </CommandList>

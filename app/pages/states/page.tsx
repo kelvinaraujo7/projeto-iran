@@ -53,7 +53,7 @@ const States = () => {
             <CardTitle className="font-bold text-2xl w-1/2 dark:text-white">
               Estados
             </CardTitle>
-            <CardDescription>Lista dos estados de atendimento</CardDescription>
+            <CardDescription className="mt-3" >Lista dos estados de atendimento:</CardDescription>
           </div>
           <div>
             <Button

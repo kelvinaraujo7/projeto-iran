@@ -26,7 +26,7 @@ import { useRouter, useParams } from "next/navigation";
 import { z } from "zod";
 import { MoveLeft } from "lucide-react";
 import React from "react";
-import { useAppData } from "@/context/AppDataContextType ";
+import { useAppData } from "../../../../context/AppDataContextType ";
 
 const formSchema = z.object({
   name: z
@@ -37,75 +37,75 @@ const formSchema = z.object({
     .max(16, {
       message: "O nome deve ter no máximo 16 caracteres.",
     }),
-  startDate: z.string().min(1, { message: "Data inicial obrigatória" }),
-  endDate: z.string().min(1, { message: "Data final obrigatória" }),
-  active: z.boolean(),
+  active: z.string(),
+
+  dayoff: z.string().optional(),
 });
 
 const TableForm = () => {
-  const { tickets, adicionarTicket, editarTicket } = useAppData();
+  const { holidays, adicionarHoliday, editarHoliday } = useAppData();
   const router = useRouter();
   const params = useParams();
   const id = params?.id;
 
-  const ticket = tickets.find((t) => String(t.id) === id);
+  const holiday = holidays.find((h) => String(h.id) === id);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: ticket?.name || "",
-      startDate: ticket?.startDate || "",
-      endDate: ticket?.endDate || "",
-      active: ticket ? ticket.status === "Ativo" : true,
+      active: holiday ? holiday.active === "Ativo" : "Desativado",
+      name: holiday?.name ?? "",
+      dayoff: holiday?.dayoff ?? "",
     },
   });
 
   React.useEffect(() => {
-    if (ticket) {
+    if (holiday) {
       form.reset({
-        name: ticket.name,
-        startDate: ticket.startDate,
-        endDate: ticket.endDate,
-        active: ticket.status === "Ativo",
+        name: holiday.name,
+        dayoff: holiday.dayoff,
+        active: holiday.active === "Ativo",
       });
     }
-  }, [ticket]);
+  }, [holiday]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (ticket) {
-      editarTicket(ticket.id, {
-        name: values.name,
-        startDate: values.startDate,
-        endDate: values.endDate,
-        status: values.active ? "Ativo" : "Desativado",
-      });
+    const novoHoliday = {
+      name: values.name,
+      dayoff: values.dayoff,
+      active: values.active ? "Ativo" : "Desativado",
+    };
+
+    if (holiday) {
+      editarHoliday(holiday.id, novoHoliday);
     } else {
-      adicionarTicket({
+      adicionarHoliday({
         id: Date.now(),
-        name: values.name,
-        startDate: values.startDate,
-        endDate: values.endDate,
-        status: values.active ? "Ativo" : "Desativado",
+        ...novoHoliday,
       });
     }
-    router.push("/pages/tickets");
+
+    router.push("/pages/holidays");
   }
 
   return (
-    <Card className="bg-slate-100 dark:bg-slate-950 mb-3 ml-10 mr-2 rounded-sm shadow-2xl shadow-card-foreground">
+    <Card className="bg-slate-100 dark:bg-slate-950 mb-4 ml-10 mr-2 rounded-sm shadow-2xl shadow-card-foreground">
       <CardHeader className="flex justify-between">
         <div>
           <CardTitle className="font-bold text-2xl w-1/2 dark:text-white">
-            Bilhetes
+            Feriados
           </CardTitle>
-          <CardDescription className="mt-3" >Cadastro bilhete de atendimento:</CardDescription>
+
+          <CardDescription className="mt-2">
+            Gerenciar Feriados:
+          </CardDescription>
         </div>
         <div>
           <Button
             asChild
             className="bg-slate-500 hover:bg-slate-700 hover:text-white"
           >
-            <Link href="/pages/tickets">
+            <Link href="/pages/holidays">
               <MoveLeft className="mr-2" />
               Voltar
             </Link>
@@ -117,58 +117,37 @@ const TableForm = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="grid grid-cols-2  gap-4"
+            className="grid grid-flow-row-dense grid-cols-2 grid-rows-4 gap-4"
           >
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem className="col-span-1 ">
-                  <FormLabel>Nome</FormLabel>
+                <FormItem className="col-span-2">
+                  <FormLabel>Feriado:</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nome do bilhete" {...field} />
+                    <Input placeholder="Ex: Dia da Independência" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <br />
-     
 
             <FormField
               control={form.control}
-              name="startDate"
+              name="dayoff"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Data inicial</FormLabel>
+                  <FormLabel>Data:</FormLabel>
                   <FormControl>
                     <Input
                       type="date"
-                      className="col-span-3"
+                      placeholder="Ex: Dia da Independência"
+                      className="w-full text-lg  leading-6"
                       style={{
-                        textAlign: "center",
+                        textAlign: "left",
                         fontSize: "14px",
                       }}
-                      placeholder=""
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="endDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Data final</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="date"
-                      className="col-span-2"
-                      placeholder=""
                       {...field}
                     />
                   </FormControl>
@@ -181,12 +160,12 @@ const TableForm = () => {
               control={form.control}
               name="active"
               render={({ field }) => (
-                <FormItem className="col-start-1 col-span-1 mt-5">
+                <FormItem className="col-span-2 mt-3 ">
                   <FormLabel>Ativo?</FormLabel>
                   <RadioGroup
                     value={field.value ? "T" : "F"}
                     onValueChange={(val) => field.onChange(val === "T")}
-                    className="flex space-x-4"
+                    className="flex items-center space-x-4"
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="T" id="option-t" />
@@ -201,10 +180,11 @@ const TableForm = () => {
                 </FormItem>
               )}
             />
-            <div className="col-start-1 col-span-1 mt-3 ">
+
+            <div className="col-span-2 flex justify-start ">
               <Button
                 type="submit"
-                className="mt-3 w-2/6 bg-blue-600 hover:bg-blue-800 dark:bg-slate-500 dark:hover:bg-slate-700 text-white font-bold py-2 px-4 rounded"
+                className="mt-5 w-1/6 bg-blue-600 hover:bg-blue-800 dark:bg-slate-500 dark:hover:bg-slate-700 text-white font-bold py-2 px-4 rounded"
               >
                 Salvar
               </Button>

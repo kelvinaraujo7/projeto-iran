@@ -53,7 +53,7 @@ const Units = () => {
             <CardTitle className="font-bold text-2xl w-1/2 dark:text-white">
               Unidades
             </CardTitle>
-            <CardDescription>Lista de unidades de atendimento</CardDescription>
+            <CardDescription className="mt-3">Lista de unidades de atendimento:</CardDescription>
           </div>
           <div>
             <Button

@@ -71,7 +71,7 @@ const TableForm = () => {
       <CardHeader className="flex justify-between">
         <div>
           <CardTitle className="font-bold text-2xl w-1/2 dark:text-white">Guichês</CardTitle>
-          <CardDescription>Cadastro guichê de atendimento</CardDescription>
+          <CardDescription className="mt-3" >Cadastro guichê de atendimento</CardDescription>
         </div>
         <div>
           <Button asChild className="bg-slate-500 hover:bg-slate-700 hover:text-white">
@@ -85,15 +85,15 @@ const TableForm = () => {
       <Separator className="bg-slate-300" />
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-flow-row-dense grid-cols-2 gap-x-8 gap-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-4  gap-4">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nome</FormLabel>
+                <FormItem className="col-span-2" >
+                  <FormLabel>Nome:</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nome do guichê, exemplo: Atendimento 01" {...field} />
+                    <Input placeholder="Nome do guichê, exemplo: guichê (x)" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -103,7 +103,7 @@ const TableForm = () => {
               control={form.control}
               name="active"
               render={({ field }) => (
-                <FormItem>
+                <FormItem  className="col-start-1 col-span-1 mt-3" >
                   <FormLabel>Ativo?</FormLabel>
                   <RadioGroup
                     value={field.value ? "T" : "F"}
@@ -123,9 +123,12 @@ const TableForm = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="mt-10 w-2/6 bg-blue-600 hover:bg-blue-800 dark:bg-slate-500 dark:hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">
+           <div className="col-start-1 col-span-1 mt-3" >
+            <Button type="submit" 
+            className="mt-1 w-4/6 bg-blue-600 hover:bg-blue-800 dark:bg-slate-500 dark:hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">
               Salvar
             </Button>
+           </div>            
           </form>
         </Form>
       </CardContent>

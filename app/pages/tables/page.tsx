@@ -53,7 +53,7 @@ const Tables = () => {
                 <CardHeader className="flex justify-between">
                     <div>
                     <CardTitle className="font-bold text-2xl w-1/2 dark:text-white">Guichês</CardTitle>
-                    <CardDescription>Lista dos guichês de atendimento</CardDescription>
+                    <CardDescription className="mt-3" >Lista dos guichês de atendimento:</CardDescription>
                     </div>
                     <div>
                     <Button asChild className="bg-slate-500 hover:bg-slate-700 hover:text-white">
