@@ -67,8 +67,8 @@ const ServicePage = () => {
       
 
       
-      <Card className="p-6 dark:bg-slate-950 border border-white/10 shadow-xl rounded-xl w-300 bg-blue-50 h-80
-       dark:bg-slate-950  inset-shadow-sm inset-shadow-white  border border-white/10 shadow-inner shadow-white/10">
+      <Card className="p-6  border border-white/10 shadow-xl rounded-xl w-300 bg-blue-50 h-80
+       dark:bg-slate-950   border border-whiinset-shadow-sm inset-shadow-white te/10 shadow-inner shadow-white/10">
         {/* Botão Voltar */}
         <div className="flex justify-start mb-4 ">
           <Button
@@ -119,7 +119,7 @@ const ServicePage = () => {
        <Button
       className="mt-5 bg-blue-500 ml-270 text-white hover:bg-white hover:text-black
       dark:bg-white dark:text-black dark:hover:bg-slate-800 dark:hover:text-white"
-       color={''} mt={'25px'} type='button' onClick={() => router.push('./emissao-ficha/ticket-digital')}>Próxima Etapa</Button>      
+       color={''} mt={'25px'} type='button' onClick={() => router.push('../emissao-ficha/ticket-digital')}>Próxima Etapa</Button>      
     </div>
   );
 };
