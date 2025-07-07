@@ -33,7 +33,7 @@ import { Button } from "@/components/ui/button";
 import { EditIcon, Power, Trash2Icon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { useAppData } from "../../../context/AppDataContextType ";
+import { useAppData } from "../../context/AppDataContextType ";
 
 const Holidays = () => {
   const { holidays, editarHoliday, excluirHoliday } = useAppData();

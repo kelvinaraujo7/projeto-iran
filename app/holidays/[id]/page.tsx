@@ -26,7 +26,7 @@ import { useRouter, useParams } from "next/navigation";
 import { z } from "zod";
 import { MoveLeft } from "lucide-react";
 import React from "react";
-import { useAppData } from "../../../../context/AppDataContextType ";
+import { useAppData } from "../../../context/AppDataContextType ";
 
 const formSchema = z.object({
   name: z

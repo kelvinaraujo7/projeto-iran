@@ -22,7 +22,7 @@ export const DetalhesModal = ({ isOpen, onClose }: Props) => {
     if (isOpen) {
       const timer = setTimeout(() => {
         onClose();
-      }, 20000000); // Tempo em milissegundos (5000ms = 5 segundos)
+      }, 20000000); 
 
       return () => clearTimeout(timer);
     }

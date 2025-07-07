@@ -46,7 +46,11 @@ const Sidebar = () => {
         <CommandGroup heading="Gestão de Fila">
           <CommandItem>
             <UserCheck className="mr-2 h-4 w-4" />
-            <Link href="/pages/emissao-ficha">Atendimento</Link>
+            <Link href="/emissao-ficha">Atendimento</Link>
+          </CommandItem>
+            <CommandItem>
+            <UserCheck className="mr-2 h-4 w-4" />
+            <Link href="/emissao-ficha/scheduling">Agendamento</Link>
           </CommandItem>
          
         </CommandGroup>
