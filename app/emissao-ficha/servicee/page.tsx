@@ -63,12 +63,12 @@ const ServicePage = () => {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col items-start w-full max-w-7xl mx-auto px-4 py-8 bg-blue-300 dark:bg-slate-950 border border-white/10 shadow-inner shadow-white/10">
+    <div className="flex flex-col items-start w-full max-w-7xl mx-auto px-4 py-8 bg-blue-300 dark:bg-slate-950 dark:shadow-xl dark:shadow-card-foreground dark:border dark:border-white/10">
       {/* Título superior */}
       <CardTitle className="mb-4 text-2xl text-white">Atendimento:</CardTitle>
 
       {/* Card principal */}
-      <Card className="w-full bg-blue-50 dark:bg-slate-950 rounded-xl p-6 border border-white/10 shadow-inner shadow-white/10">
+      <Card className="w-full bg-blue-50 dark:bg-slate-950 dark:shadow-lg shadow-card-foreground dark:border dark:border-white/10">
         {/* Cabeçalho do card */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
           <Button
@@ -79,13 +79,13 @@ const ServicePage = () => {
             Voltar
           </Button>
 
-          <CardTitle className="flex-auto text-center text-2xl text-blue-950 dark:text-white w-full sm:w-auto">
+          <CardTitle className="flex-auto mr-21 text-center text-2xl text-blue-950 dark:text-white w-full sm:w-auto">
             Serviço
           </CardTitle>
         </div>
 
         {/* Ícones de serviço */}
-        <CardContent className="flex flex-wrap justify-center gap-6">
+        <CardContent className="flex flex-wrap justify-center gap-6 ">
           {acoesCards.map(
             (
               { text, icon: Icon, cardClasses, iconClasses, textClasses },

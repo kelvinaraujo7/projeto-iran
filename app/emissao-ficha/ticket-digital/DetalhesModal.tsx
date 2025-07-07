@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Check, Banknote } from "lucide-react";
 import Image from "next/image";
-import QRCode from "../../../../public/imagens/qr-code.avif";
+import QRCode from "../../../public/imagens/qr-code.avif";
 
 type Props = {
   isOpen: boolean;
@@ -55,7 +55,7 @@ export const DetalhesModal = ({ isOpen, onClose }: Props) => {
         </div>
 
         {/* Card Principal */}
-        <div className="bg-blue-400 text-white rounded-lg pt-10 relative  dark:bg-slate-950  inset-shadow-sm inset-shadow-white inset-shadow-white te/10 shadow-inner shadow-white/10 ">
+        <div className="bg-blue-400 text-white rounded-lg pt-10 relative dark:bg-slate-950 dark:shadow-lg shadow-card-foreground dark:border dark:border-white/10 ">
 
           {/* Bordas - ticket */}
           <div className="absolute -left-4 top-1/4 w-8 h-8 mt-6 bg-black/90 dark:bg-blue-100 rounded-full z-50"></div>
@@ -83,7 +83,7 @@ export const DetalhesModal = ({ isOpen, onClose }: Props) => {
               </div>
 
               {/* Ícone - Dinheiro */}
-              <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 h-12 w-12 bg-blue-900 rounded-full flex items-center justify-center dark:bg-blue-300 dark:text-black">
+              <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 h-12 w-12 bg-blue-900 rounded-full flex items-center justify-center dark:bg-slate-900 dark:text-black">
                 <Banknote size={30} color="white " />
               </div>
 

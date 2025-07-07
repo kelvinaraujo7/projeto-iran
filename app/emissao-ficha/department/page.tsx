@@ -54,14 +54,14 @@ const DepartmentPage = () => {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col items-start justify-end w-full max-w-7xl mx-auto px-4 py-8 bg-blue-300 dark:bg-slate-950 border border-white/10 shadow-white/10">
+    <div className="flex flex-col items-start justify-end w-full max-w-7xl mx-auto px-4 py-8 bg-blue-300 dark:bg-slate-950 dark:shadow-xl shadow-card-foreground dark:border dark:border-white/10">
       {/* Título da Página */}
       <CardTitle className="mb-4 text-2xl text-white">
         Atendimento:
       </CardTitle>
 
       {/* Card principal */}
-      <Card className="bg-blue-50 dark:bg-slate-950 rounded-xl p-6 w-full inset-shadow-sm border border-white/10 shadow-inner shadow-white/10">
+      <Card className="bg-blue-50  rounded-xl p-6 w-full dark:bg-slate-950 dark:shadow-lg shadow-card-foreground dark:border dark:border-white/10">
         
         {/*  botão e título */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
@@ -73,7 +73,7 @@ const DepartmentPage = () => {
             Voltar
           </Button>
 
-          <CardTitle className="flex-1 text-center text-2xl text-blue-950 dark:text-white">
+          <CardTitle className="flex-1 mr-21 text-center text-2xl text-blue-950 dark:text-white">
             Departamento
           </CardTitle>
         </div>

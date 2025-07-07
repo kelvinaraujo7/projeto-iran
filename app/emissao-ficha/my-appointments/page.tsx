@@ -41,8 +41,7 @@ function MyDatePicker() {
         modifiers={modifiers}
         modifiersStyles={modifiersStyles}
         modifiersClassNames={modifiersClassNames}
-        className="text-white [&_.rdp-caption]:text-white [&_.rdp-head_abbr]:text-white [&_.rdp-day]:text-white [&_.rdp-nav_button]:text-white [&_.rdp-nav_button_svg]:stroke-[#fcd32a] 
-        [&_.rdp-nav_button_svg]:stroke-[2]"
+        className="text-white [&_.rdp-caption]:text-white [&_.rdp-head_abbr]:text-white [&_.rdp-day]:text-white [&_.rdp-nav_button]:text-white [&_.rdp-nav_button_svg]:stroke-[#fcd32a] [&_.rdp-nav_button_svg]:stroke-[2]"
       />
       <p className="mt-3 text-sm text-center text-white">
         {selected
@@ -109,15 +108,16 @@ const DepartmentPage = () => {
               <h3 className="text-2xl font-semibold mb-4 dark:text-white">
                 Lista de agendamentos:
               </h3>
-              <div className="space-y-4 ">
+              <div className="space-y-4">
                 {[13, 17].map((dia, i) => (
                   <div
                     key={i}
-                    className="bg-[#3c4349] p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-3 dark:bg-slate-950 dark:shadow-sm dark:shadow-2xl shadow-card-foreground dark:border dark:border-white/10"
+                    className="bg-[#3c4349] p-4 rounded-lg flex flex-col md:flex-row justify-between items-center gap-4 dark:bg-slate-950 dark:shadow-sm dark:shadow-2xl shadow-card-foreground dark:border dark:border-white/10"
                   >
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-center gap-4 w-full md:w-auto">
+                      {/* Número do dia */}
                       <div
-                        className={`text-4xl font-bold ${
+                        className={`text-4xl font-bold w-12 text-center ${
                           dia === 13
                             ? "text-green-500"
                             : dia === 17
@@ -127,17 +127,21 @@ const DepartmentPage = () => {
                       >
                         {dia}
                       </div>
-                      <div className="text-white/90 text-xl">
+
+                      {/* Informações */}
+                      <div className="text-white/90 text-base md:text-lg flex flex-col self-center">
                         <p>Estado: Rio Grande do Norte</p>
                         <p>Unidade: Natal</p>
                         <p>Departamento: Financeiro</p>
                       </div>
                     </div>
+
+                    {/* Botão */}
                     <Button
                       variant="outline"
                       className="bg-[#597183] hover:bg-[#6b8ca1] hover:text-white text-white font-semibold px-3 py-2 rounded-md dark:bg-white dark:text-black dark:hover:bg-slate-800 dark:hover:text-white"
                     >
-                      Ver mais
+                      Ver mais informações
                     </Button>
                   </div>
                 ))}

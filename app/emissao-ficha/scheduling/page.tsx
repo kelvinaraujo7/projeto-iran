@@ -257,7 +257,7 @@ const SchedulingPage = () => {
                 <input
                   id="cpf"
                   {...register("cpf")}
-                  placeholder=" CPF, exemplo: 000.000.000-11"
+                  placeholder=" CPF, exemplo: 000.000.000-00"
                   className="w-full p-2 rounded-md text-black bg-[#f1f5f8]"
                 />
                 {errors.cpf && <p className="text-[#ff4d4d] text-sm mt-1">{errors.cpf.message}</p>}
