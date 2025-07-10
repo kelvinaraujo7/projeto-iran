@@ -55,15 +55,13 @@ function MyDatePicker({ selected, setSelected, onDateClick }: {
           }}
           className="w-full max-w-full [&_.rdp-nav_button_svg]:stroke-[#fcd32a] 
           [&_.rdp-nav_button_svg]:stroke-[2]"
-          classNames={{
-            months: "flex flex-col sm:flex-row gap-4 sm:gap-8 justify-center",
-            month: "space-y-4 text-center w-full ",
-            caption: "flex justify-between px-2 py-2 font-semibold",
-            table: "w-full border-collapse",
-            head_row: "flex justify-between px-2",
-            row: "flex justify-between px-2 flex-wrap",
-            cell: "text-center w-8 h-8 rounded hover:bg-[#6b8ca1] cursor-pointer ",
-          }}
+         modifiersClassNames={{
+         scheduled: "bg-green-500 text-white",
+         cancelled: "bg-red-500 text-white",
+         passed: "bg-gray-500 text-white",
+         selected: " text-yellow-400 font-bold rounded-full",
+         today: " text-yellow-400 font-bold rounded-full",
+         }} 
         />
       </div>
       <p className="mt-2 text-sm text-center text-[#2e404e] font-semibold dark:text-white">
@@ -95,9 +93,6 @@ const SchedulingPage = () => {
     router.push("../emissao-ficha/my-appointments");
   };
 
-  const modifiersStyles = {
-    selected: { color: "yellow", backgroundColor: "rgb(252, 211, 38)" },
-  };
 
   return (
     <div className="min-h-screen w-full bg-[#eeeeee] text-[#2c3e50] dark:bg-slate-950">
@@ -166,7 +161,7 @@ const SchedulingPage = () => {
                   <option>Selecione uma unidade</option>
                 </select>
 
-                <label className="mb-2 font-semibold dark:text-white block">Escolha um tipo de serviço:</label>
+                <label className="mb-2 font-semibold dark:text-white block">Escolha um Departamento:</label>
                 <div className="flex gap-3 flex-wrap justify-center mb-2">
                   {acoesCards.map(({ text, icon: Icon }, index) => (
                     <button

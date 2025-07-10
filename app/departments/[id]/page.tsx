@@ -1,15 +1,20 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
+
+import React from "react";
+import { z } from "zod";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
+
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -22,10 +27,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useRouter, useParams } from "next/navigation";
-import { z } from "zod";
 import { MoveLeft } from "lucide-react";
-import React from "react";
+
 import { useAppData } from "../../../context/AppDataContextType ";
 
 const formSchema = z.object({
@@ -39,6 +42,7 @@ const formSchema = z.object({
   startServiceAfternoon: z.string().optional(),
   endServiceAfternoon: z.string().optional(),
   exceptionDay: z.string().optional(),
+  serviceTime: z.string().optional(),
 });
 
 const TableForm = () => {
@@ -46,7 +50,6 @@ const TableForm = () => {
   const router = useRouter();
   const params = useParams();
   const id = params?.id;
-
   const department = departments.find((d) => String(d.id) === id);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -59,6 +62,7 @@ const TableForm = () => {
       startServiceAfternoon: department?.startServiceAfternoon ?? "",
       endServiceAfternoon: department?.endServiceAfternoon ?? "",
       exceptionDay: department?.exceptionDay ?? "",
+      serviceTime: department?.serviceTime ?? "",
     },
   });
 
@@ -67,6 +71,12 @@ const TableForm = () => {
       form.reset({
         name: department.name,
         active: department.status === "Ativo",
+        startServiceMorning: department.startServiceMorning,
+        endServiceMorning: department.endServiceMorning,
+        startServiceAfternoon: department.startServiceAfternoon,
+        endServiceAfternoon: department.endServiceAfternoon,
+        exceptionDay: department.exceptionDay,
+        serviceTime: department.serviceTime,
       });
     }
   }, [department]);
@@ -81,6 +91,7 @@ const TableForm = () => {
       startServiceAfternoon: values.startServiceAfternoon,
       endServiceAfternoon: values.endServiceAfternoon,
       exceptionDay: values.exceptionDay,
+      serviceTime: values.serviceTime,
     };
 
     if (department) {
@@ -89,200 +100,152 @@ const TableForm = () => {
       adicionarDepartment(newDepartment);
     }
 
-    router.push("/pages/departments");
+    router.push("/departments");
   }
 
   return (
-    <Card className="bg-slate-100 dark:bg-slate-950 mb-4 ml-10 mr-2 rounded-sm shadow-2xl shadow-card-foreground">
-      <CardHeader className="flex justify-between">
-        <div>
-          <CardTitle className="font-bold text-2xl w-1/2 dark:text-white">
-            Departamentos
-          </CardTitle>
-          <CardDescription className="mt-5">
-            Cadastro de departamentos para atendimento:
-          </CardDescription>
-        </div>
-        <div>
+    <div className="w-full min-h-screen p-4 md:pl-[250px]">
+      <Card className="bg-slate-100 dark:bg-slate-950 shadow-lg w-full">
+        <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex-1">
+            <CardTitle className="text-xl sm:text-2xl font-bold dark:text-white">
+              Departamentos
+            </CardTitle>
+            <CardDescription className="text-sm mt-1">
+              Cadastro de departamentos para atendimento:
+            </CardDescription>
+          </div>
           <Button
             asChild
-            className="bg-slate-500 hover:bg-slate-700 hover:text-white"
+            className="bg-slate-600 hover:bg-slate-800 text-white whitespace-nowrap"
           >
-            <Link href="/pages/departments">
-              <MoveLeft className="mr-2" />
+            <Link href="/departments" className="flex items-center gap-2">
+              <MoveLeft className="w-4 h-4" />
               Voltar
             </Link>
           </Button>
-        </div>
-      </CardHeader>
+        </CardHeader>
 
-      <Separator className="bg-slate-300" />
+        <Separator className="bg-slate-300 dark:bg-slate-700" />
 
-      <CardContent>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="grid grid-cols-4  gap-4"
-          >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem className="col-span-4">
-                  <FormLabel>Nome</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Nome do departamento, exemplo: Departamento (x)"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4"
+            >
+              {/* Nome */}
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem className="col-span-1 sm:col-span-2 md:col-span-4">
+                    <FormLabel>Nome</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Nome do departamento, ex: Atendimento"
+                        {...field}
+                        className="w-full"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="startServiceMorning"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>Hora Inicial manhã</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="time"
-                      style={{
-                        textAlign: "center",
-                        fontSize: "14px",
-                      }}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              {/* Horários */}
+              {[
+                ["startServiceMorning", "Hora Inicial manhã"],
+                ["endServiceMorning", "Hora Final manhã"],
+                ["startServiceAfternoon", "Hora Inicial tarde"],
+                ["endServiceAfternoon", "Hora Final tarde"],
+              ].map(([name, label]) => (
+                <FormField
+                  key={name}
+                  control={form.control}
+                  name={name as keyof z.infer<typeof formSchema>}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{label}</FormLabel>
+                      <FormControl>
+                        <Input type="time" {...field} className="text-center text-sm" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
 
-            <FormField
-              control={form.control}
-              name="endServiceMorning"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>Hora Final manhã</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="time"
-                      style={{
-                        textAlign: "center",
-                        fontSize: "14px",
-                      }}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              {/* Dia de exceção */}
+              <FormField
+                control={form.control}
+                name="exceptionDay"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Dia De Exceção</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} className="text-center text-sm" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="startServiceAfternoon"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>Hora Inicial tarde</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="time"
-                      style={{
-                        textAlign: "center",
-                        fontSize: "14px",
-                      }}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              {/* Tempo de Serviço */}
+              <FormField
+                control={form.control}
+                name="serviceTime"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tempo de Serviço</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} className="text-center text-sm" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="endServiceAfternoon"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>Hora Final tarde</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="time"
-                      style={{
-                        textAlign: "center",
-                        fontSize: "14px",
-                      }}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              {/* Ativo */}
+              <FormField
+                control={form.control}
+                name="active"
+                render={({ field }) => (
+                  <FormItem className="col-span-1 mt-2">
+                    <FormLabel>Ativo?</FormLabel>
+                    <RadioGroup
+                      value={field.value ? "T" : "F"}
+                      onValueChange={(val) => field.onChange(val === "T")}
+                      className="flex gap-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="T" id="active-t" />
+                        <Label htmlFor="active-t">Sim</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="F" id="active-f" />
+                        <Label htmlFor="active-f">Não</Label>
+                      </div>
+                    </RadioGroup>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="exceptionDay"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>Dia De Exceção</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="date"
-                      style={{
-                        textAlign: "center",
-                        fontSize: "14px",
-                      }}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="active"
-              render={({ field }) => (
-                <FormItem className="col-start-1 col-span-1 mt-3">
-                  <FormLabel>Ativo?</FormLabel>
-                  <RadioGroup
-                    value={field.value ? "T" : "F"}
-                    onValueChange={(val) => field.onChange(val === "T")}
-                    className="flex space-x-4"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="T" id="option-t" />
-                      <Label htmlFor="option-t">Sim</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="F" id="option-f" />
-                      <Label htmlFor="option-f">Não</Label>
-                    </div>
-                  </RadioGroup>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="col-start-1 col-span-1 mt-3">
-              <Button
-                type="submit"
-                className="mt-1 w-4/6 bg-blue-600 hover:bg-blue-800 dark:bg-slate-500 dark:hover:bg-slate-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Salvar
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+              {/* Botão */}
+              <div className="col-span-full mt-4">
+                <Button
+                  type="submit"
+                  className="bg-blue-600 hover:bg-blue-800 dark:bg-slate-500 dark:hover:bg-slate-700 text-white font-bold px-6 py-2"
+                >
+                  Salvar
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

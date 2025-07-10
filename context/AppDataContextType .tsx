@@ -18,6 +18,7 @@ type Department = {
   id: number;
   name: string;
   exceptionDay: string;
+  serviceTime?: string;
   startServiceMorning?: string;
   endServiceMorning?: string;
   startServiceAfternoon?: string;

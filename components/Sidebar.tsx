@@ -67,7 +67,7 @@ const Sidebar = () => {
           
           <CommandItem>
             <Ticket className="mr-2 h-4 w-4" />
-            <Link href="/pages/services2">Fila de atendimento </Link>
+            <Link href="/services2">Fila de atendimento </Link>
           </CommandItem>
         </CommandGroup>
         <CommandSeparator />
@@ -78,36 +78,36 @@ const Sidebar = () => {
           </CommandItem>
           <CommandItem>
             <BriefcaseBusiness className="mr-2 h-4 w-4" />
-            <Link href="/pages/departments">Departamentos</Link>
+            <Link href="/departments">Departamentos</Link>
           </CommandItem>
           <CommandItem>
             <SquaresUnite  className="mr-2 h-4 w-4" />
-            <Link href="/pages/states">Estados</Link>
+            <Link href="/states">Estados</Link>
           </CommandItem>
           <CommandItem>
             <BriefcaseBusiness className="mr-2 h-4 w-4" />
-            <Link href="/pages/units">Unidades</Link>
+            <Link href="/units">Unidades</Link>
           </CommandItem>
 
           <CommandItem>
             <ReceiptText   className="mr-2 h-4 w-4" />
-            <Link href="/pages/tables">Guichês</Link>
+            <Link href="/tables">Guichês</Link>
           </CommandItem>
 
           <CommandItem>
             <CalendarDays  className="mr-2 h-4 w-4" />
-            <Link href="/pages/holidays">Feriados</Link>
+            <Link href="/holidays">Feriados</Link>
           </CommandItem>
         </CommandGroup>
         <CommandSeparator />
         <CommandGroup heading="Comunicação">
           <CommandItem>
             <Ticket className="mr-2 h-4 w-4" />
-            <Link href="/pages/tickets">Informativos</Link>
+            <Link href="/tickets">Informativos</Link>
           </CommandItem>
           <CommandItem>
             <Video className="mr-2 h-4 w-4" />
-            <Link href="/pages/videos">Vídeos</Link>
+            <Link href="/videos">Vídeos</Link>
           </CommandItem>
         </CommandGroup>
       </CommandList>
