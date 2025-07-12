@@ -1,6 +1,34 @@
-import DashboardCard from "@/components/dashboard/DashboardCard"
-import { Folder, MessageCircle, Newspaper, Users } from "lucide-react";
+"use client"
+import { useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/context/AuthContext'
+import { Loader2 } from 'lucide-react'
 
 export default function Home() {
-  return null;
+  const { isAuthenticated, isLoading } = useAuth()
+  const router = useRouter()
+  const hasRedirected = useRef(false)
+
+  useEffect(() => {
+    // ✅ EVITAR MÚLTIPLOS REDIRECIONAMENTOS
+    if (!isLoading && !hasRedirected.current) {
+      hasRedirected.current = true
+      
+      if (isAuthenticated) {
+        router.replace('/dashboard') // replace em vez de push
+      } else {
+        router.replace('/auth')
+      }
+    }
+  }, [isAuthenticated, isLoading, router])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
+  }
+
+  return null
 }
