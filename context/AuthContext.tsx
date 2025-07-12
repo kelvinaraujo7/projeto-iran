@@ -39,51 +39,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const checkAuthState = async () => {
-
-    console.log('🔍 AuthContext - checkAuthState iniciado')
-    console.log('🔍 AuthContext - setIsLoading(true)')
     setIsLoading(true)
 
     const token = localStorage.getItem('access_token')
-    console.log('🔑 Token no localStorage:', !!token)
 
     if (token) {
       try {
         const payload = JSON.parse(atob(token.split('.')[1]))
-        console.log('👤 Payload do token:', payload.preferred_username)
-        console.log('⏰ Token expira em:', new Date(payload.exp * 1000))
-        console.log('⏰ Agora:', new Date())
         
         if (payload.exp * 1000 > Date.now()) {
-          console.log('✅ Token válido - setando usuário')
-          console.log('✅ AuthContext - setUser(payload)')
           setUser(payload)
           document.cookie = `access_token=${token}; path=/; max-age=${payload.exp - Math.floor(Date.now() / 1000)}`
-          // Opcional: definir cookie para o middleware
           
         } else {
-          console.log('❌ Token expirado - removendo')
           localStorage.removeItem('access_token')
           localStorage.removeItem('refresh_token')
           document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
-          console.log('❌ AuthContext - setUser(null)')
           setUser(null)
         }
       } catch (error) {
-        console.error('❌ Erro ao verificar token:', error)
         localStorage.removeItem('access_token')
         localStorage.removeItem('refresh_token')
         document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
         setUser(null)
       }
     }else {
-      console.log('❌ Nenhum token encontrado')
-      console.log('❌ AuthContext - setUser(null) - sem token')
       setUser(null)
     }
   
-    console.log('✅ AuthContext - checkAuthState finalizado')
-    console.log('✅ AuthContext - setIsLoading(false)')
     setIsLoading(false)
   }
 
@@ -121,28 +104,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const payload = JSON.parse(atob(data.access_token.split('.')[1]))
       setUser(payload)
 
-      // Definir cookie para o middleware
       document.cookie = `access_token=${data.access_token}; path=/; max-age=${payload.exp - Math.floor(Date.now() / 1000)}`
 
       return true
     } catch (error) {
-      console.error('Erro no login:', error)
       return false
     }
   }
 
-  // ✅ NOVA FUNÇÃO DE LOGOUT COM KEYCLOAK
   const logout = async (): Promise<void> => {
     try {
-      console.log('🚪 Iniciando logout...')
-      
-      // Pegar tokens antes de limpar
       const accessToken = localStorage.getItem('access_token')
       const refreshToken = localStorage.getItem('refresh_token')
       
-      if (refreshToken) {
-        console.log('🔐 Fazendo logout no Keycloak...')
-        
+      if (refreshToken) {       
         const keycloakUrl = process.env.NEXT_PUBLIC_KEYCLOAK_URL
         const realm = process.env.NEXT_PUBLIC_KEYCLOAK_REALM
         const clientId = process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID
@@ -155,7 +130,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                // Opcional: incluir token no header
+                // Optional: include token in header
                 ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
               },
               body: new URLSearchParams({
@@ -166,32 +141,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             }
           )
 
-          if (logoutResponse.ok) {
-            console.log('✅ Logout no Keycloak realizado com sucesso')
-          } else {
-            console.warn('⚠️ Resposta não OK do Keycloak:', logoutResponse.status, logoutResponse.statusText)
-            // Continuar com logout local mesmo se falhar no Keycloak
-          }
         } catch (keycloakError) {
-          console.warn('⚠️ Erro ao fazer logout no Keycloak:', keycloakError)
-          // Continuar com logout local mesmo se falhar no Keycloak
+          // console.warn('⚠️ Error logging out of Keycloak:', keycloakError)
+    
         }
       } else {
-        console.log('ℹ️ Nenhum refresh token encontrado - fazendo apenas logout local')
+        // console.log('ℹ️ No refresh token found - just logging out locally')
       }
     } catch (error) {
-      console.warn('⚠️ Erro durante processo de logout:', error)
-    } finally {
-      // ✅ SEMPRE LIMPAR DADOS LOCAIS (mesmo se logout no Keycloak falhar)
-      console.log('🧹 Limpando dados locais...')
-      
+      // console.warn('⚠️ Error during logout process:', error)
+    } finally {      
       localStorage.removeItem('access_token')
       localStorage.removeItem('refresh_token')
       document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
       
       setUser(null)
-      
-      console.log('✅ Logout concluído - redirecionando para /auth')
+    
       router.push('/auth')
     }
   }
@@ -217,7 +182,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (context === undefined) {
-    throw new Error('useAuth deve ser usado dentro de um AuthProvider')
+    throw new Error('useAuth must be used inside an AuthProvider')
   }
   return context
 }

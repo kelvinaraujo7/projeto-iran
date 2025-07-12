@@ -1,11 +1,11 @@
 import { RouteConfig } from '@/types/auth'
 
 /**
- * Configuração de proteção por rota
- * IMPORTANTE: Rotas mais específicas devem vir primeiro!
- */
+* Per-route protection configuration
+* IMPORTANT: More specific routes must come first!
+*/
 export const routeConfigs: Record<string, RouteConfig> = {
-  // === ROTAS ADMINISTRATIVAS ===
+  // === ADMINISTRATIVE ROUTES ===  
   '/admin/users/create': {
     realmRoles: ['admin'],
     clientRoles: ['create-users'],
@@ -28,7 +28,7 @@ export const routeConfigs: Record<string, RouteConfig> = {
     requireAllRoles: true
   },
 
-  // === GESTÃO ===
+  // === MANAGEMENT ===
   '/management/reports': {
     realmRoles: ['manager'],
     clientRoles: ['view-reports', 'generate-reports'],
@@ -40,7 +40,7 @@ export const routeConfigs: Record<string, RouteConfig> = {
     requireAllRoles: false
   },
 
-  // === USUÁRIOS ===
+  // === USERS ===
   '/users/create': {
     realmRoles: ['admin', 'user-manager'],
     clientRoles: ['create-users'],
@@ -53,7 +53,7 @@ export const routeConfigs: Record<string, RouteConfig> = {
     requireAllRoles: false
   },
 
-  // === RELATÓRIOS ===
+  // === REPORTS ===
   '/reports/financial': {
     realmRoles: ['financial-manager', 'admin'],
     clientRoles: ['view-financial-reports'],
@@ -65,17 +65,17 @@ export const routeConfigs: Record<string, RouteConfig> = {
     requireAllRoles: true
   },
 
-  // === DEPARTAMENTOS ===
+  // === DEPARTMENTS ===
   '/departments/create': {
     realmRoles: ['admin', 'department-manager'],
     requireAllRoles: false
   },
 
   '/departments': {
-    allowPublic: false  // Qualquer usuário autenticado
+    allowPublic: false  // Any authenticated user
   },
 
-  // === TABELAS ===
+  // === TABLES ===
   '/tables/new': {
     // realmRoles: ['admin', 'manager'],
     clientRoles: ['HEAD_OFFICE_ADMIN'],
@@ -135,7 +135,7 @@ export const routeConfigs: Record<string, RouteConfig> = {
     allowPublic: true, 
   },
 
-  // === ROTAS ESPECIAIS ===
+// === SPECIAL ROUTES ===
   '/not-found': {
     allowPublic: true
   },
@@ -150,64 +150,51 @@ export const routeConfigs: Record<string, RouteConfig> = {
 }
 
 /**
- * Verifica se a rota é uma rota conhecida/configurada
- */
-export function isKnownRoute(path: string): boolean {
-  console.log(`🔍 Verificando se rota é conhecida: ${path}`)
-  
-  // Casos especiais para rota raiz
+* Checks if the route is a known/configured route
+*/
+export function isKnownRoute(path: string): boolean {  
+// Special cases for root route
   if (path === '/') {
-    console.log(`✅ Rota raiz é sempre conhecida`)
     return true
   }
   
-  // Verificar rotas configuradas
   const configuredRoutes = Object.keys(routeConfigs)
     .sort((a, b) => b.length - a.length)
   
-  console.log(`📋 Rotas configuradas:`, configuredRoutes)
-  
   for (const route of configuredRoutes) {
     if (path.startsWith(route)) {
-      console.log(`✅ Rota encontrada: ${path} corresponde a ${route}`)
       return true
     }
   }
   
-  console.log(`❌ Rota NÃO encontrada: ${path}`)
   return false
 }
 
 /**
- * Encontra a configuração mais específica para uma rota
- */
+* Finds the most specific configuration for a route
+*/
 export function findRouteConfig(path: string): RouteConfig | null {
-  console.log(`🔍 Procurando configuração para: ${path}`)
   
-  // Caso especial para rota raiz
+  // Special case for root route
   if (path === '/') {
-    console.log(`✅ Configuração para rota raiz`)
     return { allowPublic: true }
   }
   
-  // Verificar rotas configuradas
   const sortedRoutes = Object.keys(routeConfigs)
     .sort((a, b) => b.length - a.length)
   
   for (const route of sortedRoutes) {
     if (path.startsWith(route)) {
-      console.log(`✅ Configuração encontrada: ${path} → ${route}`, routeConfigs[route])
       return routeConfigs[route]
     }
   }
   
-  console.log(`❌ Nenhuma configuração específica encontrada para: ${path}`)
   return null
 }
 
 /**
- * Verifica se a rota é pública
- */
+* Checks if the route is public
+*/
 export function isPublicRoute(path: string): boolean {
   const config = findRouteConfig(path)
   return config?.allowPublic === true

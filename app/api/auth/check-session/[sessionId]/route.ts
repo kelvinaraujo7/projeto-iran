@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Armazenamento temporário de sessões (em produção, use Redis ou DB)
 const activeSessions = new Map<string, {
   authenticated: boolean;
   token?: string;
@@ -28,7 +27,6 @@ export async function GET(
     });
   }
 
-  // Verificar se a sessão expirou
   if (Date.now() > session.expiresAt) {
     activeSessions.delete(sessionId);
     return NextResponse.json({ 

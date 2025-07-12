@@ -27,7 +27,6 @@ export default function NotFound() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       <Card className="w-full max-w-md text-center">
         <CardHeader className="space-y-4">
-          {/* ✅ ADICIONAR LOGO ACIMA DO ÍCONE */}
           <div className="mx-auto">
             <Image
               src={logoCofen}

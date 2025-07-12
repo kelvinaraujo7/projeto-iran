@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Extend the global type to include activeSessions
 declare global {
   // eslint-disable-next-line no-var
   var activeSessions: Map<string, {
@@ -22,18 +21,16 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Initialize activeSessions if it doesn't exist
     if (!global.activeSessions) {
       global.activeSessions = new Map();
     }
 
-    // Salvar sessão autenticada (expira em 1 hora)
     global.activeSessions.set(sessionId, {
       authenticated: true,
       token,
       refreshToken,
       unitId,
-      expiresAt: Date.now() + (60 * 60 * 1000) // 1 hora
+      expiresAt: Date.now() + (60 * 60 * 1000) // 1 hour expiration
     });
 
     return NextResponse.json({ 
