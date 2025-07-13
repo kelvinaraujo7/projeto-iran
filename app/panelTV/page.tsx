@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import QRCode from 'qrcode';
 import Image from "next/image";
-import logoCofen from "../public/img/250x250.png";
+import logoCofen from "../../public/img/250x250.png";
 
 const PanelPage = () => {
   const { user, isAuthenticated } = useAuth();
@@ -12,13 +12,12 @@ const PanelPage = () => {
   const [sessionId, setSessionId] = useState<string>('');
   const [isWaitingAuth, setIsWaitingAuth] = useState(true);
 
-  // ✅ GERAR SESSION ID ÚNICO
   useEffect(() => {
     const newSessionId = `panel-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     setSessionId(newSessionId);
   }, []);
 
-  // ✅ GERAR QR CODE
+
   useEffect(() => {
     if (sessionId) {
       const mobileAuthUrl = `${window.location.origin}/mobile-auth?sessionId=${sessionId}&redirect=panelTV`;
@@ -34,7 +33,7 @@ const PanelPage = () => {
     }
   }, [sessionId]);
 
-  // ✅ POLLING PARA VERIFICAR AUTENTICAÇÃO
+
   useEffect(() => {
     if (!sessionId || isAuthenticated) return;
 
@@ -44,18 +43,17 @@ const PanelPage = () => {
         const data = await response.json();
         
         if (data.authenticated && data.token) {
-          // Salvar token no localStorage
+    
           localStorage.setItem('access_token', data.token);
           localStorage.setItem('refresh_token', data.refreshToken || '');
           
-          // Definir cookie para middleware
+        
           document.cookie = `access_token=${data.token}; path=/;`;
           
-          // Parar polling e mostrar conteúdo
+      
           setIsWaitingAuth(false);
           clearInterval(pollInterval);
           
-          // Recarregar página para aplicar autenticação
           window.location.reload();
         }
       } catch (error) {
@@ -66,7 +64,6 @@ const PanelPage = () => {
     return () => clearInterval(pollInterval);
   }, [sessionId, isAuthenticated]);
 
-  // ✅ SE JÁ ESTÁ AUTENTICADO, MOSTRAR CONTEÚDO
   if (isAuthenticated && !isWaitingAuth) {
     return (
       <div className="w-full h-screen flex flex-col">

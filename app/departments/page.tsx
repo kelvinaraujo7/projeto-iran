@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -16,19 +15,166 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Power, Trash2Icon, EditIcon } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Plus, Power, Trash2Icon, EditIcon, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { useAppData } from "@/context/AppDataContextType ";
+import { 
+  useDepartments, 
+  useUpdateDepartment, 
+  useDeleteDepartment,
+  type Department
+} from "@/hooks/api/useDepartments";
+import { useState } from "react";
+import { toast } from "sonner";
 
-const Departments = () => {
-  const { departments, editarDepartment, excluirDepartment } = useAppData();
+const DepartmentsWithQuery = () => {
+  const [filter] = useState<{ page?: number }>({});
+  const [deleteDialog, setDeleteDialog] = useState<{
+    isOpen: boolean;
+    department: Department | null;
+  }>({
+    isOpen: false,
+    department: null,
+  });
 
-  function alternarStatus(department: { id: number; status: string }) {
-    editarDepartment(department.id, {
-      status: department.status === "Ativo" ? "Desativado" : "Ativo",
+  const { 
+    data: departmentsResponse, 
+    isLoading, 
+    isError, 
+    error, 
+    refetch 
+  } = useDepartments(filter);
+
+  const departments = departmentsResponse?.departments || [];
+  const totalCount = departmentsResponse?.totalCount || 0;
+
+  const updateDepartmentMutation = useUpdateDepartment();
+  const deleteDepartmentMutation = useDeleteDepartment();
+
+  const handleToggleStatus = async (department: Department) => {
+    if (!department.id) return;
+    try {
+      // O backend exige TODOS os campos obrigatórios no PUT
+      const updateData = {
+        name: department.name,
+        onlineScheduling: department.onlineScheduling || false,
+        serviceTime: department.serviceTime || "00:30:00",
+        startServiceMorning: department.startServiceMorning || "08:00:00",
+        endServiceMorning: department.endServiceMorning || "12:00:00",
+        startServiceAfternoon: department.startServiceAfternoon || "14:00:00",
+        endServiceAfternoon: department.endServiceAfternoon || "18:00:00",
+        exceptionDay: department.exceptionDay || null,
+        active: !department.active, // Inverter o valor
+      };
+      
+      await updateDepartmentMutation.mutateAsync({
+        id: department.id,
+        data: updateData
+      });
+      toast.success('Status do departamento atualizado com sucesso!');
+    } catch {
+      toast.error('Erro ao atualizar status do departamento');
+    }
+  };
+
+  const handleToggleOnlineScheduling = async (department: Department) => {
+    
+    if (!department.id) {
+      console.error('No department ID found!');
+      return;
+    }
+    
+    try {
+      // O backend exige TODOS os campos obrigatórios no PUT
+      const updateData = {
+        name: department.name,
+        onlineScheduling: !department.onlineScheduling, // Inverter o valor
+        serviceTime: department.serviceTime || "00:30:00",
+        startServiceMorning: department.startServiceMorning || "08:00:00",
+        endServiceMorning: department.endServiceMorning || "12:00:00",
+        startServiceAfternoon: department.startServiceAfternoon || "14:00:00",
+        endServiceAfternoon: department.endServiceAfternoon || "18:00:00",
+        exceptionDay: department.exceptionDay || null,
+        active: department.active,
+      };
+      
+      await updateDepartmentMutation.mutateAsync({
+        id: department.id,
+        data: updateData
+      });
+      toast.success('Agendamento online atualizado com sucesso!');
+    } catch (error) {
+      toast.error('Erro ao atualizar agendamento online');
+    }
+  };
+
+  const handleDelete = async (department: Department) => {
+    setDeleteDialog({
+      isOpen: true,
+      department: department,
     });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteDialog.department?.id) return;
+    
+    try {
+      await deleteDepartmentMutation.mutateAsync(deleteDialog.department.id);
+      toast.success('Departamento excluído com sucesso!');
+      setDeleteDialog({ isOpen: false, department: null });
+    } catch {
+      toast.error('Erro ao excluir departamento');
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteDialog({ isOpen: false, department: null });
+  };
+
+  if (isLoading) {
+    return (
+      <div className="p-4 w-full">
+        <Card className="bg-slate-100 dark:bg-slate-950 shadow-md">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-center">
+              <RefreshCw className="h-6 w-6 animate-spin mr-2" />
+              Carregando departamentos...
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="p-4 w-full">
+        <Card className="bg-slate-100 dark:bg-slate-950 shadow-md">
+          <CardContent className="p-6">
+            <div className="text-center">
+              <p className="text-red-600 mb-4">
+                Erro ao carregar departamentos: {error?.message}
+              </p>
+              <Button onClick={() => refetch()} variant="outline">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Tentar novamente
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
@@ -36,11 +182,19 @@ const Departments = () => {
       <Card className="bg-slate-100 dark:bg-slate-950 shadow-md w-full">
         <CardHeader className="flex flex-col sm:flex-row justify-between gap-4">
           <div>
-            <CardTitle className="text-xl sm:text-2xl dark:text-white">
+            <CardTitle className="text-xl sm:text-2xl dark:text-white flex items-center gap-2">
               Departamentos
+              <Button
+                onClick={() => refetch()}
+                variant="ghost"
+                size="sm"
+                disabled={isLoading}
+              >
+                <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+              </Button>
             </CardTitle>
             <CardDescription className="text-sm sm:text-base mt-2">
-              Lista dos departamentos de atendimento:
+              Lista dos departamentos de atendimento ({totalCount} departamentos):
             </CardDescription>
           </div>
           <Button
@@ -48,101 +202,154 @@ const Departments = () => {
             className="bg-slate-600 hover:bg-slate-800 text-white whitespace-nowrap"
           >
             <Link href="/departments/new" className="flex items-center gap-2">
-              <Plus size={16} />
-              Novo departamento
+              <Plus className="h-4 w-4" />
+              Novo Departamento
             </Link>
           </Button>
         </CardHeader>
 
-        <Separator className="bg-slate-300 dark:bg-slate-700" />
+        <Separator />
 
-        <CardContent className="overflow-x-auto">
-          <Table className="w-full min-w-[1000px]">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead className="text-center">Hora Inicial Manhã</TableHead>
-                <TableHead className="text-center">Hora Final Manhã</TableHead>
-                <TableHead className="text-center">Hora Inicial Tarde</TableHead>
-                <TableHead className="text-center">Hora Final Tarde</TableHead>
-                <TableHead className="text-center">Dia de Exceção</TableHead>
-                <TableHead className="text-center">Tempo de Serviço</TableHead>
-                <TableHead className="text-center">Status</TableHead>
-                <TableHead className="text-center">Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-
-            <TableBody>
-              {Array.isArray(departments) &&
-                departments.map((department) => (
-                  <TableRow key={department.id}>
-                    <TableCell>{department.name}</TableCell>
-                    <TableCell className="text-center">
-                      {department.startServiceMorning}
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-200 dark:bg-slate-800">
+                  <TableHead className="text-left p-3 text-xs sm:text-sm font-medium">
+                    Nome
+                  </TableHead>
+                  <TableHead className="text-center p-3 text-xs sm:text-sm font-medium">
+                    Agendamento Online
+                  </TableHead>
+                  <TableHead className="text-center p-3 text-xs sm:text-sm font-medium">
+                    Horário Atendimento
+                  </TableHead>
+                  <TableHead className="text-center p-3 text-xs sm:text-sm font-medium">
+                    Tempo de serviço
+                  </TableHead>
+                  <TableHead className="text-center p-3 text-xs sm:text-sm font-medium">
+                    Dia exceção
+                  </TableHead>
+                  <TableHead className="text-center p-3 text-xs sm:text-sm font-medium">
+                    Ações
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {departments?.map((department: Department) => (
+                  <TableRow key={department.id} className="hover:bg-slate-50 dark:hover:bg-slate-900">
+                    <TableCell className="p-3 text-xs sm:text-sm font-medium">
+                      {department.name}
                     </TableCell>
-                    <TableCell className="text-center">
-                      {department.endServiceMorning}
+                    <TableCell className="p-3 text-center">
+                      <span
+                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                          department.onlineScheduling
+                            ? "bg-blue-100 text-blue-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {department.onlineScheduling ? "Ativo" : "Inativo"}
+                      </span>
                     </TableCell>
-                    <TableCell className="text-center">
-                      {department.startServiceAfternoon}
+                    <TableCell className="p-3 text-xs sm:text-sm text-center">
+                      <p>Manhã: {department.startServiceMorning} - {department.endServiceMorning}</p>
+                      <p>Tarde: {department.startServiceAfternoon} - {department.endServiceAfternoon}</p>
                     </TableCell>
-                    <TableCell className="text-center">
-                      {department.endServiceAfternoon}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {department.exceptionDay}
-                    </TableCell>
-                    <TableCell className="text-center">
+                    <TableCell className="p-3 text-xs sm:text-sm text-center">
                       {department.serviceTime}
                     </TableCell>
-                    <TableCell
-                      className={`text-center font-semibold ${
-                        department.status === "Ativo"
-                          ? "text-green-700 dark:text-green-400"
-                          : "text-red-600 dark:text-red-400"
-                      }`}
-                    >
-                      {department.status}
+                    <TableCell className="p-3 text-xs sm:text-sm text-center">
+                      {department.exceptionDay ? 
+                        new Date(department.exceptionDay).toLocaleDateString('pt-BR') : 
+                        '-'
+                      }
                     </TableCell>
-                    <TableCell className="text-center">
-                      <div className="flex justify-center gap-2">
-                        <button
-                          className={`p-2 rounded-md ${
-                            department.status === "Ativo"
-                              ? "bg-red-600"
-                              : "bg-green-600"
-                          } text-white`}
-                          onClick={() => alternarStatus(department)}
-                          title="Alternar status"
-                        >
-                          <Power className="w-4 h-4" />
-                        </button>
+                    <TableCell className="p-3">
+                      <div className="flex items-center justify-center gap-1 sm:gap-2">
                         <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleToggleOnlineScheduling(department)}
+                          disabled={updateDepartmentMutation.isPending}
+                          className="h-8 w-8 p-0"
+                          title={department.onlineScheduling ? 'Desativar agendamento online' : 'Ativar agendamento online'}
+                        >
+                          <Power className={`h-3 w-3 sm:h-4 sm:w-4 ${
+                            department.onlineScheduling ? 'text-red-600' : 'text-green-600'
+                          }`} />
+                        </Button>
+                        
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           asChild
-                          className="p-2 bg-blue-600 text-white"
+                          className="h-8 w-8 p-0"
                         >
                           <Link href={`/departments/${department.id}`}>
-                            <EditIcon className="w-4 h-4" />
+                            <EditIcon className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600" />
                           </Link>
                         </Button>
+                        
                         <Button
-                          className="p-2 bg-red-500 text-white"
-                          onClick={() => excluirDepartment(department.id)}
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDelete(department)}
+                          disabled={deleteDepartmentMutation.isPending}
+                          className="h-8 w-8 p-0"
                         >
-                          <Trash2Icon className="w-4 h-4" />
+                          <Trash2Icon className="h-3 w-3 sm:h-4 sm:w-4 text-red-600" />
                         </Button>
                       </div>
                     </TableCell>
                   </TableRow>
                 ))}
-            </TableBody>
-          </Table>
+                
+                {(!departments || departments.length === 0) && (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center p-8 text-gray-500">
+                      Nenhum departamento encontrado
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
-
-        <CardFooter />
       </Card>
+
+      {/* Dialog de Confirmação de Exclusão */}
+      <AlertDialog open={deleteDialog.isOpen} onOpenChange={(open) => !open && cancelDelete()}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar Exclusão</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir o departamento{" "}
+              <strong>"{deleteDialog.department?.name}"</strong>?
+              <br />
+              <br />
+              Esta ação não pode ser desfeita e todos os dados relacionados serão permanentemente removidos.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={cancelDelete}>
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              disabled={deleteDepartmentMutation.isPending}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+            >
+              {deleteDepartmentMutation.isPending && (
+                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+              )}
+              Sim, Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
 
-export default Departments;
+export default DepartmentsWithQuery;

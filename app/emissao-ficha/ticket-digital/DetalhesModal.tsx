@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Check, Banknote } from "lucide-react";
 import Image from "next/image";
-import QRCode from "../../../public/imagens/qr-code.avif";
+import QRCode from "../../../public/img/qr-code.avif";
 
 type Props = {
   isOpen: boolean;
