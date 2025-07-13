@@ -89,7 +89,6 @@ const SchedulingPage = () => {
   });
 
   const onSubmit = (data: FormData) => {
-    console.log("Dados validados:", { ...data, dataSelecionada: selectedDate });
     router.push("../emissao-ficha/my-appointments");
   };
 

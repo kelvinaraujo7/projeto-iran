@@ -11,7 +11,7 @@ export interface Department {
   endServiceMorning?: string;
   startServiceAfternoon?: string;
   endServiceAfternoon?: string;
-  exceptionDay?: Date | null;
+  exceptionDay?: Date | string | null; // Aceitar string ISO do banco
   unitId?: string;
   active: boolean;
   

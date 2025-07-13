@@ -73,7 +73,6 @@ const TableForm = () => {
   }, [video]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     const videoData = {
       description: values.description,
       url: values.url,

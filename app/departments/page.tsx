@@ -48,6 +48,37 @@ const DepartmentsWithQuery = () => {
     department: null,
   });
 
+  const formatDateFromDB = (dateValue: string | Date | null | undefined): string => {
+    if (!dateValue) return '-';
+  
+    try {
+      if (typeof dateValue === 'string' && dateValue.includes('T')) {
+        const dateOnly = dateValue.split('T')[0]; // "2025-08-11"
+        const [year, month, day] = dateOnly.split('-');
+        const formatted = `${day}/${month}/${year}`; // "11/08/2025"
+        return formatted;
+      }
+      
+      if (typeof dateValue === 'string' && dateValue.includes('-')) {
+        const [year, month, day] = dateValue.split('-');
+        const formatted = `${day}/${month}/${year}`;
+        return formatted;
+      }
+      
+      if (dateValue instanceof Date) {
+        const formatted = dateValue.toLocaleDateString('pt-BR');
+
+        return formatted;
+      }
+      
+
+      return String(dateValue);
+    } catch (error) {
+      console.error('❌ Erro ao formatar data:', error, 'Valor:', dateValue);
+      return String(dateValue);
+    }
+  };
+
   const { 
     data: departmentsResponse, 
     isLoading, 
@@ -96,10 +127,10 @@ const DepartmentsWithQuery = () => {
     }
     
     try {
-      // O backend exige TODOS os campos obrigatórios no PUT
+
       const updateData = {
         name: department.name,
-        onlineScheduling: !department.onlineScheduling, // Inverter o valor
+        onlineScheduling: !department.onlineScheduling,
         serviceTime: department.serviceTime || "00:30:00",
         startServiceMorning: department.startServiceMorning || "08:00:00",
         endServiceMorning: department.endServiceMorning || "12:00:00",
@@ -260,10 +291,7 @@ const DepartmentsWithQuery = () => {
                       {department.serviceTime}
                     </TableCell>
                     <TableCell className="p-3 text-xs sm:text-sm text-center">
-                      {department.exceptionDay ? 
-                        new Date(department.exceptionDay).toLocaleDateString('pt-BR') : 
-                        '-'
-                      }
+                      {formatDateFromDB(department.exceptionDay)}
                     </TableCell>
                     <TableCell className="p-3">
                       <div className="flex items-center justify-center gap-1 sm:gap-2">
