@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import QRCode from 'qrcode';
-import Image from 'next/image';
-// import logoCofen from '../../public/img/250x250.png';
+import Image from "next/image";
+import logoCofen from "../public/img/250x250.png";
 
 const PanelPage = () => {
   const { user, isAuthenticated } = useAuth();
@@ -108,7 +108,7 @@ const PanelPage = () => {
         {/* Logo */}
         <div className="mb-6">
           <Image
-            src="/img/250x250.png"
+            src={logoCofen}
             alt="Logo Cofen"
             width={120}
             height={120}

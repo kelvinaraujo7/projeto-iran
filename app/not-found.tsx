@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Home, LogOut, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import Image from "next/image"; // ✅ ADICIONAR IMPORT
+import Image from "next/image";
 import logoCofen from "../public/img/250x250.png";
 
 export default function NotFound() {
