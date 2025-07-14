@@ -47,7 +47,7 @@ const Tickets = () => {
 
   return (
     <>
-      <Card className="bg-slate-100 dark:bg-slate-950 mb-4 ml-4 mr-2 rounded-sm shadow-2xl shadow-card-foreground">
+      <Card className="bg-slate-100 dark:bg-slate-950 mb-4 ml-4 mr-2 dark:rounded-sm dark:shadow-lg dark:shadow-card-foreground">
         <CardHeader className="flex justify-between">
           <div>
             <CardTitle className="font-bold text-2xl w-1/2 dark:text-white">
@@ -60,9 +60,9 @@ const Tickets = () => {
           <div>
             <Button
               asChild
-              className="bg-slate-500 hover:bg-slate-700 hover:text-white"
+              className="bg-slate-500 hover:bg-slate-700 hover:text-white dark:bg-white dark:text-black dark:hover:bg-slate-700 dark:hover:text-white"
             >
-              <Link href="/pages/tickets/new">
+              <Link href="/tickets/new">
                 <Plus className="mr-2" />
                 Novo bilhete
               </Link>
@@ -126,7 +126,7 @@ const Tickets = () => {
                           asChild
                           className="bg-blue-500 dark:bg-slate-400 text-white px-2 py-2 rounded-md mr-2"
                         >
-                          <Link href={`/pages/tickets/${ticket.id}`}>
+                          <Link href={`/tickets/${ticket.id}`}>
                             <EditIcon className="w-4 h-4" />
                           </Link>
                         </Button>
@@ -143,7 +143,7 @@ const Tickets = () => {
             </TableBody>
           </Table>
         </CardContent>
-        <CardFooter>{/* Paginação, se necessário */}</CardFooter>
+        <CardFooter></CardFooter>
       </Card>
     </>
   );
