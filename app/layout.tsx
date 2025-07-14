@@ -39,15 +39,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <QueryProvider>
-            <AuthProvider>
+          {/* <QueryProvider> */}
+            {/* <AuthProvider> */}
               <AppDataProvider>
                 <ClientLayout>
                   {children}
                 </ClientLayout>
               </AppDataProvider>
-            </AuthProvider>
-          </QueryProvider>
+            {/* </AuthProvider> */}
+          {/* </QueryProvider> */}
           <Toaster />
         </ThemeProvider>
       </body>

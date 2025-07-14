@@ -15,12 +15,12 @@ import {
   Activity,
   TrendingUp
 } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+// import { useAuth } from "@/context/AuthContext";
 import { useAppData } from "@/context/AppDataContextType ";
 
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  // const { user } = useAuth();
   const { departments } = useAppData();
 
   // Estatísticas mock - você pode substituir por dados reais
@@ -40,7 +40,7 @@ const Dashboard = () => {
           Dashboard
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mt-2">
-          Bem-vindo(a), {user?.name || user?.preferred_username}! 
+          {/* Bem-vindo(a), {user?.name || user?.preferred_username}!  */}
           Aqui está um resumo do sistema.
         </p>
       </div>
@@ -173,7 +173,7 @@ const Dashboard = () => {
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                 <div className="flex-1">
-                  <p className="text-sm">Usuário {user?.name} fez login</p>
+                  {/* <p className="text-sm">Usuário {user?.name} fez login</p> */}
                   <p className="text-xs text-gray-500">Agora mesmo</p>
                 </div>
               </div>

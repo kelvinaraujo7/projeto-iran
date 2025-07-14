@@ -24,14 +24,14 @@ import logoCofen from "../public/img/250x250.png";
 import { ModeToggle } from "./ui/toggle";
 import {CalendarDays, ReceiptText, SquaresUnite   } from "lucide-react";
 import { Button } from "./ui/button";
-import { useAuth } from "@/context/AuthContext";
+// import { useAuth } from "@/context/AuthContext";
 
 const Sidebar = () => {
-  const { user, logout } = useAuth();
+  // const { user, logout } = useAuth();
 
   const handleLogout = async () => {
     try {
-      await logout()
+      // await logout()
     } catch (error) {
       console.error('Erro ao fazer logout: ', error)
     }
@@ -63,10 +63,10 @@ const Sidebar = () => {
             <User className="h-4 w-4" />
             <div className="flex flex-col">
               <span className="text-sm font-medium">
-                {user?.name || user?.preferred_username || 'Usuário'}
+                {/* {user?.name || user?.preferred_username || 'Usuário'} */}
               </span>
               <span className="text-xs text-gray-600 dark:text-gray-400">
-                {user?.email}
+                {/* {user?.email} */}
               </span>
             </div>
           </CommandItem>
