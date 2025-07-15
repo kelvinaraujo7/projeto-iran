@@ -61,7 +61,7 @@ const DepartmentPage = () => {
       </CardTitle>
 
       {/* Card principal */}
-      <Card className="bg-blue-50  rounded-xl p-6 w-full dark:bg-slate-950 dark:shadow-lg shadow-card-foreground dark:border dark:border-white/10">
+      <Card className="bg-blue-50  rounded-xl p-6 w-full dark:bg-slate-950 dark:shadow-lg dark:shadow-card-foreground dark:border dark:border-white/10">
         
         {/*  botão e título */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">

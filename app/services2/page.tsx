@@ -61,11 +61,11 @@ const acoesCards = [
 
 const Services = () => {
   return (
-    <div className="w-full px-6 md:px-12 max-w-[1280px] mx-auto flex flex-col gap-10">
+    <div className="w-full px-4 sm:px-6 md:px-12 max-w-[1920px] mx-auto flex flex-col gap-10">
       {/* Atendimento + Ações */}
       <div className="flex flex-col lg:flex-row gap-10">
         {/* Atendimento */}
-        <Card className="flex-1 max-w-md bg-slate-100 dark:bg-slate-950 dark:border dark:border-white/10 dark:shadow-lg dark:shadow-card-foreground rounded-lg flex flex-col">
+        <Card className="flex-1 bg-slate-100 dark:bg-slate-950 dark:border dark:border-white/10 dark:shadow-lg dark:shadow-card-foreground rounded-lg flex flex-col">
           <CardHeader>
             <CardTitle className="text-3xl font-semibold dark:text-white">
               Atendimento
@@ -74,7 +74,7 @@ const Services = () => {
           <CardContent className="flex flex-1 items-center justify-center">
             <Button
               variant="outline"
-              className="w-72 h-72 flex flex-col items-center justify-center gap-4 dark:bg-slate-950 dark:border dark:border-white/10 dark:shadow-lg dark:shadow-card-foreground rounded-lg"
+              className="  hover:bg-blue-100 w-72 h-72 flex flex-col items-center justify-center gap-4 dark:bg-slate-950 dark:border dark:border-white/10 dark:shadow-lg dark:shadow-card-foreground rounded-lg"
             >
               <div className="relative flex items-center justify-center h-24 w-full">
                 <MessagesSquare className="absolute size-14 text-blue-400 z-0 -top-8" />
@@ -89,13 +89,13 @@ const Services = () => {
         </Card>
 
         {/* Ações */}
-        <Card className="flex-1 max-w-4xl bg-slate-100 dark:bg-slate-950 dark:border dark:border-white/10 dark:shadow-lg dark:shadow-card-foreground rounded-lg">
+        <Card className="flex-[2] bg-slate-100 dark:bg-slate-950 dark:border dark:border-white/10 dark:shadow-lg dark:shadow-card-foreground rounded-lg">
           <CardHeader>
             <CardTitle className="text-2xl font-semibold dark:text-white">
               Ações
             </CardTitle>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <CardContent className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
             {acoesCards.map(
               ({ text, icon: Icon, cardClasses, iconClasses, textClasses }) => (
                 <div
@@ -105,9 +105,7 @@ const Services = () => {
                   <Icon
                     className={`${iconClasses} bg-white rounded-full p-2 w-14 h-14 mb-3`}
                   />
-                  <span
-                    className={`${textClasses} font-semibold text-sm leading-snug`}
-                  >
+                  <span className={`${textClasses} font-semibold text-sm leading-snug`}>
                     {text}
                   </span>
                 </div>
@@ -118,25 +116,25 @@ const Services = () => {
       </div>
 
       {/* Minha Fila */}
-      <Card className="bg-slate-100 dark:bg-slate-950 dark:border dark:border-white/10 dark:shadow-lg dark:shadow-card-foreground rounded-lg">
+      <Card className="w-full bg-slate-100 dark:bg-slate-950 dark:border dark:border-white/10 dark:shadow-lg dark:shadow-card-foreground rounded-lg">
         <CardHeader>
           <CardTitle className="text-3xl font-semibold dark:text-white">
             Minha fila
           </CardTitle>
         </CardHeader>
-        <CardFooter className="flex flex-wrap gap-8 pt-6 justify-center">
-          {[1, 2].map((_, index) => (
+        <CardFooter className="flex flex-wrap gap-6 pt-6 justify-start">
+          {[1, 2, 3, 4].map((_, index) => (
             <div
               key={index}
-              className="bg-blue-400 hover:bg-blue-500 text-white dark:bg-slate-900 dark:hover:bg-slate-800 rounded-xl px-10 py-6 w-full sm:w-90 dark:bg-slate-950 dark:border dark:border-white/10 dark:shadow-sm dark:shadow-card-foreground"
+              className="bg-blue-400 hover:bg-blue-500 text-white dark:bg-slate-900 dark:hover:bg-slate-800 rounded-xl px-8 py-5 w-full sm:w-[280px] md:w-[300px] xl:w-[340px] dark:bg-slate-950 dark:border dark:border-white/10 dark:shadow-sm dark:shadow-card-foreground"
             >
-              <div className="flex gap-5">
+              <div className="flex gap-4">
                 <User className="w-7 h-7 text-orange-300" />
                 <div className="flex flex-col">
-                  <div className="flex gap-4">
+                  <div className="flex gap-3">
                     <span className="text-xl font-bold">4</span>
                     <span className="text-base font-semibold">
-                      {index === 0
+                      {index % 2 === 0
                         ? "Atendimento preferencial"
                         : "Atendimento Normal"}
                     </span>

@@ -111,7 +111,7 @@ const Myappointments = () => {
             <div className="w-full max-w-full sm:max-w-[420px] xl:max-w-[420px] md:max-w-[100%] mx-auto items-center gap-6">
               <MyDatePicker />
               <div className="text-[#2e404e] text-sm w-full dark:text-white">
-                <h4 className="text-lg font-semibold mb-2">Sumário de cores:</h4>
+                <h4 className="text-lg font-semibold mb-2 mt-2">Sumário de cores:</h4>
                 <div className="flex items-center gap-2 text-lg">
                   <CircleDot className="text-green-500" size={16} />
                   <span>Agendado</span>

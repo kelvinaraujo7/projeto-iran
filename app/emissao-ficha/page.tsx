@@ -32,7 +32,7 @@ const Services = () => {
     <div className="flex flex-col items-start justify-end w-full max-w-7xl mx-auto px-4 py-8 bg-blue-300 dark:bg-slate-950 dark:shadow-xl shadow-card-foreground dark:border dark:border-white/10">
       <CardTitle className="mb-4 text-2xl text-white">Atendimento:</CardTitle>
 
-      <Card className="p-6 rounded-xl w-full bg-blue-50 dark:bg-slate-950 dark:shadow-lg shadow-card-foreground dark:border dark:border-white/10">
+      <Card className="p-6 rounded-xl w-full bg-blue-50 dark:bg-slate-950 dark:shadow-lg dark:shadow-card-foreground dark:border dark:border-white/10">
         <div className="flex justify-center mb-4">
           <CardTitle className="text-center text-2xl text-blue-950 dark:text-white">
             Tipo de Atendimento

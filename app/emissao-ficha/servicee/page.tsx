@@ -68,12 +68,12 @@ const ServicePage = () => {
       <CardTitle className="mb-4 text-2xl text-white">Atendimento:</CardTitle>
 
       {/* Card principal */}
-      <Card className="w-full bg-blue-50 dark:bg-slate-950 dark:shadow-lg shadow-card-foreground dark:border dark:border-white/10">
+      <Card className="w-full bg-blue-50 dark:bg-slate-950 dark:shadow-lg dark:shadow-card-foreground dark:border dark:border-white/10">
         {/* Cabeçalho do card */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
           <Button
             variant="outline"
-            className="bg-blue-400 text-white dark:bg-white dark:text-black hover:bg-blue-500 dark:hover:bg-slate-800 dark:hover:text-white"
+            className="bg-blue-400 text-white dark:bg-white dark:text-black hover:bg-blue-500 dark:hover:bg-slate-800 dark:hover:text-white ml-1"
             onClick={() => router.push("../emissao-ficha/department")}
           >
             Voltar

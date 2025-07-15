@@ -21,7 +21,7 @@ import { isBefore, startOfDay } from "date-fns";
 const schema = z.object({
   nome: z.string().min(2, "Nome obrigatório").regex(/^[A-Za-zÀ-ÿ\s]+$/, "Apenas letras são permitidas"),
   email: z.string().email("E-mail inválido"),
-  cpf: z.string().min(14, "CPF incompleto").regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido"),
+  cpf: z.string().regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido") .refine((val) => val.length === 14, { message: "CPF incompleto" }),
   horario: z.string().min(1, "Selecione um horário"),
   servico: z.string().min(1, "Selecione um tipo de serviço"),
 });
@@ -254,6 +254,18 @@ const SchedulingPage = () => {
                   id="cpf"
                   {...register("cpf")}
                   placeholder=" CPF, exemplo: 000.000.000-00"
+                  maxLength={14}
+                  onChange={(e) => {
+                  let value = e.target.value.replace(/\D/g, ""); // remove tudo que não é número
+                  if (value.length > 11) value = value.slice(0, 11); 
+                  const formatted = value
+                 .replace(/(\d{3})(\d)/, "$1.$2")
+                 .replace(/(\d{3})(\d)/, "$1.$2")
+                 .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+                 e.target.value = formatted;
+                 // Atualiza valor manualmente no react-hook-form
+                 setValue("cpf", formatted);
+                 }}
                   className="w-full p-2 rounded-md text-black bg-[#f1f5f8]"
                 />
                 {errors.cpf && <p className="text-[#ff4d4d] text-sm mt-1">{errors.cpf.message}</p>}
