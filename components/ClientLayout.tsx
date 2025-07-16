@@ -52,7 +52,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <div className="flex">
       <Sidebar />
-      <div className="p-5 w-full md:max-w-[1140px]">{children}</div>
+      <div className="p-5 flex-1">{children}</div>
     </div>
   );
 }

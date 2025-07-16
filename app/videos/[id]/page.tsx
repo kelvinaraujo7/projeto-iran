@@ -90,7 +90,7 @@ const TableForm = () => {
 
   return (
     <div className="w-full min-h-screen p-4">
-      <div className="w-full max-w-5xl mx-auto">
+      <div className="w-full max-w-7xl mx-auto">
         <Card className="w-full bg-slate-100 dark:bg-slate-950 dark:border dark:border-white/10 dark:shadow-lg dark:shadow-card-foreground">
           <CardHeader className="flex flex-col md:flex-row justify-between gap-4">
             <div>
@@ -122,7 +122,7 @@ const TableForm = () => {
                   control={form.control}
                   name="description"
                   render={({ field }) => (
-                    <FormItem className="md:col-span-2">
+                    <FormItem className="md:col-span-3">
                       <FormLabel>Título</FormLabel>
                       <FormControl>
                         <Input placeholder="Título do vídeo" className="w-full" {...field} />
@@ -142,7 +142,7 @@ const TableForm = () => {
                         <Input
                           type="url"
                           placeholder="https://exemplo.com.br"
-                          className="w-full text-sm"
+                          className=""
                           {...field}
                         />
                       </FormControl>
@@ -161,7 +161,7 @@ const TableForm = () => {
                         <Input
                           type="number"
                           placeholder="Ex: 1"
-                          className="w-full text-sm"
+                          className=""
                           {...field}
                         />
                       </FormControl>
@@ -195,10 +195,10 @@ const TableForm = () => {
                   )}
                 />
 
-                <div className="md:col-span-2 flex justify-start">
+                <div className="col-span-full mt-4">
                   <Button
                     type="submit"
-                    className="mt-5 w-full md:w-1/4 bg-blue-600 hover:bg-blue-800 dark:bg-slate-500 dark:hover:bg-slate-700 text-white font-bold py-2 px-4 rounded dark:bg-white dark:text-black dark:hover:bg-slate-700 dark:hover:text-white"
+                    className=" w-full sm:w-auto bg-blue-600 hover:bg-blue-800 dark:bg-slate-500 dark:hover:bg-slate-700 text-white font-bold py-2 px-4 rounded dark:bg-white dark:text-black dark:hover:bg-slate-700 dark:hover:text-white"
                   >
                     Salvar
                   </Button>

@@ -86,7 +86,7 @@ const TableForm = () => {
 
   return (
     <div className="w-full min-h-screen p-4">
-      <div className="w-full max-w-5xl mx-auto">
+      <div className="w-full max-w-7xl mx-auto">
         <Card className="w-full bg-slate-100 dark:bg-slate-950 dark:border dark:border-white/10 dark:shadow-lg dark:shadow-card-foreground">
           <CardHeader className="flex flex-col md:flex-row justify-between gap-4">
             <div>
@@ -118,13 +118,12 @@ const TableForm = () => {
                   control={form.control}
                   name="name"
                   render={({ field }) => (
-                    <FormItem className="md:col-span-2">
+                    <FormItem className="col-span-full">
                       <FormLabel>Feriado:</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Ex: Dia da Independência"
                           {...field}
-                          className="w-full"
                         />
                       </FormControl>
                       <FormMessage />
@@ -155,12 +154,12 @@ const TableForm = () => {
                   control={form.control}
                   name="active"
                   render={({ field }) => (
-                    <FormItem className="md:col-span-2 mt-3 w-full">
+                    <FormItem className="col-span-full mt-3 w-full">
                       <FormLabel>Ativo?</FormLabel>
                       <RadioGroup
                         value={field.value ? "T" : "F"}
                         onValueChange={(val) => field.onChange(val === "T")}
-                        className="flex items-center space-x-4"
+                        className="flex flex-col sm:flex-row sm:items-center gap-2"
                       >
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem value="T" id="option-t" />
@@ -176,10 +175,10 @@ const TableForm = () => {
                   )}
                 />
 
-                <div className="md:col-span-2 flex justify-start">
+                <div className="col-span-full mt-4">
                   <Button
                     type="submit"
-                    className="mt-5 w-full md:w-1/6 bg-blue-600 hover:bg-blue-800 dark:bg-slate-500 dark:hover:bg-slate-700 text-white font-bold py-2 px-4 rounded dark:bg-white dark:text-black dark:hover:bg-slate-700 dark:hover:text-white"
+                    className="w-full md:w-1/6 bg-blue-600 hover:bg-blue-800 dark:bg-slate-500 dark:hover:bg-slate-700 text-white font-bold py-2 px-4 rounded dark:bg-white dark:text-black dark:hover:bg-slate-700 dark:hover:text-white"
                   >
                     Salvar
                   </Button>

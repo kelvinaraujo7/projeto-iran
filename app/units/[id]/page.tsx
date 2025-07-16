@@ -83,7 +83,7 @@ const Units = () => {
 
   return (
     <div className="w-full min-h-screen p-4">
-      <div className="w-full max-w-5xl mx-auto">
+      <div className="w-full max-w-7xl mx-auto">
         <Card className="w-full bg-slate-100 dark:bg-slate-950 dark:border dark:border-white/10 dark:shadow-lg dark:shadow-card-foreground">
           <CardHeader className="flex flex-col md:flex-row justify-between gap-4">
             <div>

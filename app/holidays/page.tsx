@@ -45,11 +45,10 @@ const Holidays = () => {
   }
 
   return (
-    <>
-      <Card className="bg-slate-100 dark:bg-slate-950 mb-4 ml-4 mr-2 rounded-sm dark:shadow-lg dark:shadow-card-foreground">
-        <CardHeader className="flex justify-between">
+      <Card className="bg-slate-100 dark:bg-slate-950 mb-4 ml-4 mr-2 rounded-sm dark:shadow-lg dark:shadow-card-foreground ">
+        <CardHeader className="flex flex-col sm:flex-row justify-between gap-4">
           <div>
-            <CardTitle className="font-bold text-2xl w-1/2 dark:text-white">
+            <CardTitle className="font-bold text-2xl  dark:text-white">
               Feriados
             </CardTitle>
             <CardDescription className="mt-3">
@@ -68,14 +67,16 @@ const Holidays = () => {
             </Button>
           </div>
         </CardHeader>
+
         <Separator className="bg-slate-300" />
-        <CardContent>
-          <Table>
+
+        <CardContent className="overflow-x-auto">
+          <Table className="min-w-[600px]" >
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Nome </TableHead>
+                <TableHead className="w-[200px]">Nome </TableHead>
                 <TableHead className="text-center">Dia de Folga</TableHead>
-                <TableHead className="text-center w-[100px]">Ações</TableHead>
+                <TableHead className="text-center w-[180px]">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -101,7 +102,7 @@ const Holidays = () => {
                     </TableCell>
 
                     <TableCell className="text-center">
-                      <div className="flex gap-2 ml-auto w-fit">
+                      <div className="flex flex-wrap justify-center gap-2">
                         <button
                           className={`px-2 py-2 rounded-md mr-2 ${
                             holiday.active === "Ativo"
@@ -136,7 +137,7 @@ const Holidays = () => {
         </CardContent>
         <CardFooter></CardFooter>
       </Card>
-    </>
+    
   );
 };
 
