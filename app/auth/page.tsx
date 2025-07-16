@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-// import { useAuth } from '@/context/AuthContext'
+import { useAuth } from '@/context/AuthContext'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -15,39 +15,37 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   
-  // const { login, isAuthenticated } = useAuth()
+  const { login, isAuthenticated } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
   
-  // Pegar URL de retorno dos parâmetros
   const returnUrl = searchParams.get('returnUrl')
 
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     // Redirecionar para a URL original ou departments
-  //     const targetUrl = returnUrl || '/dashboard'
-  //     router.push(decodeURIComponent(targetUrl))
-  //   }
-  // }, [isAuthenticated, router, returnUrl])
+  useEffect(() => {
+    if (isAuthenticated) {
+      const targetUrl = returnUrl || '/dashboard'
+      router.push(decodeURIComponent(targetUrl))
+    }
+  }, [isAuthenticated, router, returnUrl])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError('')
 
-    // try {
-    //   const success = await login(username, password)
-    //   if (success) {
-    //     const targetUrl = returnUrl || '/dashboard'
-    //     router.push(decodeURIComponent(targetUrl))
-    //   } else {
-    //     setError('Credenciais inválidas. Verifique seu email e senha.')
-    //   }
-    // } catch (error) {
-    //   setError('Erro ao realizar login. Tente novamente.')
-    // } finally {
-    //   setIsLoading(false)
-    // }
+    try {
+      const success = await login(username, password)
+      if (success) {
+        const targetUrl = returnUrl || '/dashboard'
+        router.push(decodeURIComponent(targetUrl))
+      } else {
+        setError('Credenciais inválidas. Verifique seu email e senha.')
+      }
+    } catch (error) {
+      setError('Erro ao realizar login. Tente novamente.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -62,7 +60,6 @@ export default function AuthPage() {
           </p>
         </div>
         
-        {/* Aviso de redirecionamento */}
         {returnUrl && (
           <Alert>
             <AlertDescription>

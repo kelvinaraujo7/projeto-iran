@@ -41,7 +41,7 @@ import { api } from "@/lib/api";
 const formSchema = z.object({
   name: z
     .string()
-    .min(6, { message: "O nome deve ter pelo menos 6 caracteres." })
+    .min(4, { message: "O nome deve ter pelo menos 4 caracteres." })
     .max(50, { message: "O nome deve ter no máximo 50 caracteres." }),
   active: z.boolean(),
   onlineScheduling: z.boolean().optional(),
@@ -95,7 +95,7 @@ const DepartmentForm = () => {
         if (!time) return "";
         if (typeof time === 'string') {
           if (time.includes(':')) {
-            return time.substring(0, 5); // Pegar apenas HH:MM
+            return time.substring(0, 5); // Get only HH:MM
           }
           return time;
         }
@@ -254,8 +254,8 @@ const DepartmentForm = () => {
   }
 
   return (
-    <div className="w-full min-h-screen p-4 md:pl-[250px]">
-      <Card className="bg-slate-100 dark:bg-slate-950 shadow-lg w-full">
+    <div className="flex justify-start px-4 py-8">
+      <Card className="bg-slate-100 dark:bg-slate-950 shadow-lg shadow-muted-foreground w-full">
         <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex-1">
             <CardTitle className="text-xl sm:text-2xl font-bold dark:text-white">

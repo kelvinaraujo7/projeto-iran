@@ -14,15 +14,6 @@ export interface Department {
   exceptionDay?: Date | string | null; // Aceitar string ISO do banco
   unitId?: string;
   active: boolean;
-  
-  start_service_morning?: string;
-  end_service_morning?: string;
-  start_service_afternoon?: string;
-  end_service_afternoon?: string;
-  online_scheduling?: boolean;
-  service_time?: string;
-  exception_day?: Date | string | null;
-  unit_id?: string;
 }
 
 export interface CreateDepartmentData {
@@ -95,7 +86,7 @@ export function useDepartment(id: string) {
   });
 }
 
-// Hook para buscar um departamento específico por ID
+// Hook to search for a specific department by ID
 export function useDepartmentById(id: string | undefined) {
   return useQuery({
     queryKey: departmentKeys.detail(id || ''),
