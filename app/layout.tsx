@@ -7,6 +7,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import ClientLayout from "@/components/ClientLayout";
 import QueryProvider from "@/providers/QueryProvider";
 import { Toaster } from "sonner";
+import TokenWatcher from "@/components/TokenWatcher";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,15 +40,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          {/* <QueryProvider> */}
-            {/* <AuthProvider> */}
+          <QueryProvider>
+            <AuthProvider>
+              <TokenWatcher />
               <AppDataProvider>
                 <ClientLayout>
                   {children}
                 </ClientLayout>
               </AppDataProvider>
-            {/* </AuthProvider> */}
-          {/* </QueryProvider> */}
+            </AuthProvider>
+          </QueryProvider>
           <Toaster />
         </ThemeProvider>
       </body>

@@ -15,15 +15,15 @@ import {
   Activity,
   TrendingUp
 } from "lucide-react";
-// import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { useAppData } from "@/context/AppDataContextType ";
 
 
 const Dashboard = () => {
-  // const { user } = useAuth();
+  const { user } = useAuth();
   const { departments } = useAppData();
 
-  // Estatísticas mock - você pode substituir por dados reais
+// Mock statistics - you can replace with real data
   const stats = {
     totalDepartments: Array.isArray(departments) ? departments.length : 0,
     activeDepartments: Array.isArray(departments) 
@@ -40,12 +40,12 @@ const Dashboard = () => {
           Dashboard
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mt-2">
-          {/* Bem-vindo(a), {user?.name || user?.preferred_username}!  */}
+          Bem-vindo(a), {user?.name || user?.preferred_username}! 
           Aqui está um resumo do sistema.
         </p>
       </div>
 
-      {/* Cards de Estatísticas */}
+      {/* Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -108,7 +108,7 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      {/* Cards de Informações */}
+      {/* Information Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="bg-slate-100 dark:bg-slate-950">
           <CardHeader>
@@ -173,7 +173,7 @@ const Dashboard = () => {
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                 <div className="flex-1">
-                  {/* <p className="text-sm">Usuário {user?.name} fez login</p> */}
+                  <p className="text-sm">Usuário {user?.name} fez login</p>
                   <p className="text-xs text-gray-500">Agora mesmo</p>
                 </div>
               </div>
